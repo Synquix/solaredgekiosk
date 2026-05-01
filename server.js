@@ -18,11 +18,25 @@ const PORT = process.env.PORT || 3000;
 let lastSolar = null;
 let lastWeather = null;
 
+function getErrorMessage(error) {
+  if (error && error.response && error.response.data) {
+    return error.response.data;
+  }
+
+  if (error && error.message) {
+    return error.message;
+  }
+
+  return error;
+}
+
 async function fetchSolar() {
   const res = await axios.get(
-    `https://monitoringapi.solaredge.com/site/${SITE_ID}/overview.json`,
+    "https://monitoringapi.solaredge.com/site/" + SITE_ID + "/overview.json",
     {
-      params: { api_key: API_KEY },
+      params: {
+        api_key: API_KEY
+      },
       timeout: 10000
     }
   );
@@ -53,20 +67,20 @@ async function sendData() {
   try {
     solar = await fetchSolar();
     lastSolar = solar;
-  } catch (e) {
-    console.error("SolarEdge fetch failed:", e.response?.data || e.message);
+  } catch (error) {
+    console.error("SolarEdge fetch failed:", getErrorMessage(error));
   }
 
   try {
     weather = await fetchWeather();
     lastWeather = weather;
-  } catch (e) {
-    console.error("Weather fetch failed:", e.response?.data || e.message);
+  } catch (error) {
+    console.error("Weather fetch failed:", getErrorMessage(error));
   }
 
   io.emit("data", {
-    solar,
-    weather,
+    solar: solar,
+    weather: weather,
     errors: {
       solar: solar ? null : "SolarEdge data unavailable",
       weather: weather ? null : "Weather data unavailable"
@@ -74,12 +88,12 @@ async function sendData() {
   });
 }
 
-io.on("connection", () => {
+io.on("connection", function () {
   sendData();
 });
 
 setInterval(sendData, 10000);
 
-server.listen(PORT, () => {
+server.listen(PORT, function () {
   console.log("Running on port " + PORT);
 });
