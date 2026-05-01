@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Energy Command Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+</head>
+
+<body class="scene-night">
+
+<canvas id="globe"></canvas>
+<canvas id="particles"></canvas>
+
+<div id="weather"></div>
+
+<div class="center">
+  <div id="power">--</div>
+  <div class="label">Watts</div>
+  <div class="prediction">Next: <span id="pred">--</span></div>
+</div>
+
+<div class="flow">
+  <div class="node sun">☀️</div>
+  <div class="node home">🏠</div>
+  <div class="node grid">⚡</div>
+
+  <svg class="lines">
+    <line id="line1" x1="10%" y1="50%" x2="45%" y2="50%" />
+    <line id="line2" x1="55%" y1="50%" x2="90%" y2="50%" />
+  </svg>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
