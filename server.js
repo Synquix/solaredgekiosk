@@ -1,4 +1,3 @@
-cat > server.js <<'EOF'
 require("dotenv").config();
 
 const express = require("express");
@@ -84,4 +83,3 @@ setInterval(sendData, 10000);
 server.listen(PORT, () => {
   console.log("Running on port " + PORT);
 });
-EOF
