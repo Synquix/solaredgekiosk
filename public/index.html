@@ -1,39 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Energy Command Center</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SolarEdge Performance Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 </head>
-
 <body class="scene-night">
+  <canvas id="globe" aria-hidden="true"></canvas>
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
 
-<canvas id="globe"></canvas>
-<canvas id="particles"></canvas>
+  <main class="dashboard-shell">
+    <header class="topbar glass-panel">
+      <div class="site-heading">
+        <p class="eyebrow">SolarEdge Live Operations</p>
+        <h1 id="siteName">Loading site...</h1>
+      </div>
 
-<div id="weather"></div>
+      <div class="topbar-right">
+        <div class="brand-lockup" aria-label="Installed by Arch Solar C&I">
+          <span>Installed by</span>
+          <img src="arch-solar-ci-logo.png" alt="Arch Solar C&I" />
+        </div>
 
-<div class="center">
-  <div id="power">--</div>
-  <div class="label">Watts</div>
-  <div class="prediction">Next: <span id="pred">--</span></div>
-</div>
+        <div class="system-status">
+          <div class="status-pill" id="connectionStatus">
+            <span class="status-dot"></span>
+            Connecting
+          </div>
+          <div class="timestamp">
+            <span>Last update</span>
+            <strong id="lastUpdated">--</strong>
+          </div>
+        </div>
+      </div>
+    </header>
 
-<div class="flow">
-  <div class="node sun">☀️</div>
-  <div class="node home">🏠</div>
-  <div class="node grid">⚡</div>
+    <section class="hero-grid">
+      <article class="hero-card glass-panel">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Current production</p>
+            <h2 id="power">--</h2>
+          </div>
+          <span class="unit-badge" id="powerUnit">W</span>
+        </div>
 
-  <svg class="lines">
-    <line id="line1" x1="10%" y1="50%" x2="45%" y2="50%" />
-    <line id="line2" x1="55%" y1="50%" x2="90%" y2="50%" />
-  </svg>
-</div>
+        <div class="capacity-wrap">
+          <div class="capacity-track">
+            <div class="capacity-fill" id="capacityFill"></div>
+          </div>
+          <div class="capacity-meta">
+            <span>Estimated capacity load</span>
+            <strong id="capacityPercent">--</strong>
+          </div>
+        </div>
 
-<script src="app.js"></script>
+        <div class="insight-row">
+          <div>
+            <span>System capacity</span>
+            <strong><span id="pred">--</span> <span id="predUnit">kW</span></strong>
+          </div>
+          <div>
+            <span>Production mode</span>
+            <strong id="modeLabel">Standby</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="weather-card glass-panel">
+        <p class="eyebrow">Local conditions</p>
+        <div class="weather-main">
+          <div class="weather-icon" id="weatherIcon" aria-hidden="true">☀</div>
+          <div>
+            <div id="weather" class="weather-value">Waiting</div>
+            <p class="weather-caption" id="weatherCaption">Weather feed will appear here.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="metrics-grid" aria-label="Solar production metrics">
+      <article class="metric-card glass-panel">
+        <span>Today</span>
+        <strong id="todayEnergy">--</strong>
+        <small id="todayUnit">kWh</small>
+      </article>
+      <article class="metric-card glass-panel">
+        <span>This Month</span>
+        <strong id="monthEnergy">--</strong>
+        <small id="monthUnit">kWh</small>
+      </article>
+      <article class="metric-card glass-panel">
+        <span>Lifetime</span>
+        <strong id="lifetimeEnergy">--</strong>
+        <small id="lifetimeUnit">MWh</small>
+      </article>
+      <article class="metric-card glass-panel">
+        <span>CO2 Offset</span>
+        <strong id="co2Offset">--</strong>
+        <small>estimated lbs</small>
+      </article>
+      <article class="metric-card glass-panel impact-card">
+        <span>Miles Avoided</span>
+        <strong id="milesAvoided">--</strong>
+        <small>equivalent miles</small>
+      </article>
+      <article class="metric-card glass-panel impact-card">
+        <span>Trees Planted</span>
+        <strong id="treesPlanted">--</strong>
+        <small>10-year seedlings</small>
+      </article>
+      <article class="metric-card glass-panel impact-card">
+        <span>Devices Charged</span>
+        <strong id="devicesCharged">--</strong>
+        <small>smartphone charges</small>
+      </article>
+    </section>
+
+    <section class="flow-card glass-panel">
+      <div class="flow-node source">
+        <div class="node-icon">☀</div>
+        <span>Solar Array</span>
+      </div>
+      <div class="energy-line">
+        <span></span>
+      </div>
+      <div class="flow-node home">
+        <div class="node-icon">⌂</div>
+        <span>Facility Load</span>
+      </div>
+      <div class="energy-line" id="gridLine">
+        <span></span>
+      </div>
+      <div class="flow-node grid">
+        <div class="node-icon">⚡</div>
+        <span id="gridLabel">Grid Export</span>
+      </div>
+    </section>
+  </main>
+
+  <script src="kiosk-config.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
