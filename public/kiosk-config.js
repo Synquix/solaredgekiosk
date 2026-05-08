@@ -4,7 +4,7 @@
 window.KIOSK_CONFIG = {
   // Put the exact kiosk title here, for example: "ABC Manufacturing Solar Array".
   // Leave blank to use SITE_NAME from .env or SolarEdge data.
-  siteName: "",
+  siteName: "Pettit National Ice Center",
 
   // Put the true system size here. You can use either watts or kilowatts.
   // systemCapacityWatts wins when both are set.

@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SolarEdge Performance Dashboard</title>
+  <title>SolarEdge Project Dashboard</title>
+  <meta name="solaredgekiosk-build" content="palette-no-flow-v4" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=palette-no-flow-v4" />
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 </head>
@@ -20,14 +21,14 @@
   <main class="dashboard-shell">
     <header class="topbar glass-panel">
       <div class="site-heading">
-        <p class="eyebrow">SolarEdge Live Operations</p>
-        <h1 id="siteName">Loading site...</h1>
+        <p class="eyebrow">SolarEdge Project Operations</p>
+        <h1 id="siteName">Loading project...</h1>
       </div>
 
       <div class="topbar-right">
-        <div class="brand-lockup" aria-label="Installed by Arch Solar C&I">
+        <div class="brand-lockup" aria-label="Installed by Arch Solar C&amp;I">
           <span>Installed by</span>
-          <img src="arch-solar-ci-logo.png" alt="Arch Solar C&I" />
+          <img src="arch-solar-ci-logo.png" alt="Arch Solar C&amp;I" />
         </div>
 
         <div class="system-status">
@@ -47,7 +48,7 @@
       <article class="hero-card glass-panel">
         <div class="card-header">
           <div>
-            <p class="eyebrow">Current production</p>
+            <p class="eyebrow">Project production</p>
             <h2 id="power">--</h2>
           </div>
           <span class="unit-badge" id="powerUnit">W</span>
@@ -58,18 +59,18 @@
             <div class="capacity-fill" id="capacityFill"></div>
           </div>
           <div class="capacity-meta">
-            <span>Estimated capacity load</span>
+            <span>Estimated project load</span>
             <strong id="capacityPercent">--</strong>
           </div>
         </div>
 
         <div class="insight-row">
           <div>
-            <span>System capacity</span>
+            <span>Project capacity</span>
             <strong><span id="pred">--</span> <span id="predUnit">kW</span></strong>
           </div>
           <div>
-            <span>Production mode</span>
+            <span>Operating mode</span>
             <strong id="modeLabel">Standby</strong>
           </div>
         </div>
@@ -87,7 +88,7 @@
       </aside>
     </section>
 
-    <section class="metrics-grid" aria-label="Solar production metrics">
+    <section class="metrics-grid" aria-label="Project solar production metrics">
       <article class="metric-card glass-panel">
         <span>Today</span>
         <strong id="todayEnergy">--</strong>
@@ -124,30 +125,9 @@
         <small>smartphone charges</small>
       </article>
     </section>
-
-    <section class="flow-card glass-panel">
-      <div class="flow-node source">
-        <div class="node-icon">☀</div>
-        <span>Solar Array</span>
-      </div>
-      <div class="energy-line">
-        <span></span>
-      </div>
-      <div class="flow-node home">
-        <div class="node-icon">⌂</div>
-        <span>Facility Load</span>
-      </div>
-      <div class="energy-line" id="gridLine">
-        <span></span>
-      </div>
-      <div class="flow-node grid">
-        <div class="node-icon">⚡</div>
-        <span id="gridLabel">Grid Export</span>
-      </div>
-    </section>
   </main>
 
-  <script src="kiosk-config.js"></script>
-  <script src="app.js"></script>
+  <script src="kiosk-config.js?v=palette-no-flow-v4"></script>
+  <script src="app.js?v=palette-no-flow-v4"></script>
 </body>
 </html>

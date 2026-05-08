@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io({ path: "/solaredgekiosk/socket.io" });
 const KIOSK_CONFIG = window.KIOSK_CONFIG || {};
 
 const $ = (id) => document.getElementById(id);
@@ -115,7 +115,7 @@ async function loadKioskConfig() {
   }
 
   try {
-    const response = await fetch("/config", { cache: "no-store" });
+    const response = await fetch("/solaredgekiosk/config", { cache: "no-store" });
     if (!response.ok) throw new Error(`config status ${response.status}`);
     const config = await response.json();
 
@@ -220,6 +220,7 @@ function setScene(power) {
 }
 
 function updateFlow(power) {
+  if (!els.gridLine || !els.gridLabel) return;
   const exporting = power > 500;
   els.gridLine.classList.toggle("import", !exporting);
   els.gridLabel.textContent = exporting ? "Grid Export" : "Grid Import";
@@ -365,7 +366,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const globe = new THREE.Mesh(
   new THREE.SphereGeometry(2.2, 64, 64),
   new THREE.MeshBasicMaterial({
-    color: 0xf37021,
+    color: 0xe35700,
     wireframe: true,
     transparent: true,
     opacity: 0.3
@@ -419,7 +420,7 @@ function animateParticles() {
     if (particle.y < -10) particle.y = canvas.height + 10;
 
     ctx.beginPath();
-    ctx.fillStyle = `rgba(243, 112, 33, ${particle.opacity})`;
+    ctx.fillStyle = `rgba(227, 87, 0, ${particle.opacity})`;
     ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
     ctx.fill();
   });
@@ -460,3 +461,5 @@ function resetIdle() {
 window.addEventListener("mousemove", resetIdle);
 window.addEventListener("touchstart", resetIdle);
 resetIdle();
+
+console.info("SolarEdge kiosk UI: palette-no-flow-v4 loaded");
